@@ -17,6 +17,7 @@ public class ClienteDTO implements Serializable {
 	@NotBlank
 	@Size(min = 5, max = 120)
 	private String nome;
+	
 	@NotBlank
 	@Email
 	private String email;

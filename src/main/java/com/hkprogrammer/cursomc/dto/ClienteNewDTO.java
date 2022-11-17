@@ -2,23 +2,46 @@ package com.hkprogrammer.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+
 public class ClienteNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	@NotBlank
+	@Size(min = 5, max = 120)
 	private String nome;
+	
+	@NotBlank
+	@Email
 	private String email;
+	
+	@NotBlank
 	private String cpfOuCnpj;
+	
 	private Integer tipo;
 	
+	@NotBlank
 	private String logradouro;
+	
+	@NotBlank
 	private String numero;
+	
 	private String complemento;
+	
 	private String bairro;
+	
+	@NotBlank
 	private String cep;
 	
+	@NotBlank
 	private String telefone1;
+	
 	private String telefone2;
+	
 	private String telefone3;
 	
 	private Integer cidadeId;
