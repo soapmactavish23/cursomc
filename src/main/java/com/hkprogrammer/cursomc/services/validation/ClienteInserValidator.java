@@ -6,8 +6,10 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import com.hkprogrammer.cursomc.domain.enums.TipoCliente;
 import com.hkprogrammer.cursomc.dto.ClienteNewDTO;
 import com.hkprogrammer.cursomc.resources.exceptions.FieldMessage;
+import com.hkprogrammer.cursomc.services.validation.utils.BR;
 
 public class ClienteInserValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
 
@@ -17,12 +19,17 @@ public class ClienteInserValidator implements ConstraintValidator<ClienteInsert,
 
 	@Override
 	public boolean isValid(ClienteNewDTO objDto, ConstraintValidatorContext context) {
+		
 		List<FieldMessage> list = new ArrayList<>();
 
 		// inclua os testes aqui, inserindo erros na lista
 		
-		if(objDto.getTipo() == null) {
-			list.add(new FieldMessage("tipo", "Tipo não pode ser nulo"));
+		if(objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && BR.isValidCPF(objDto.getCpfOuCnpj())) {
+			list.add(new FieldMessage("cpfOuCnpj", "CPF inválido"));
+		}
+		
+		if(objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
+			list.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
 		}
 		
 		for (FieldMessage e : list) {
@@ -30,6 +37,7 @@ public class ClienteInserValidator implements ConstraintValidator<ClienteInsert,
 			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())
 					.addConstraintViolation();
 		}
+		
 		return list.isEmpty();
 	}
 
