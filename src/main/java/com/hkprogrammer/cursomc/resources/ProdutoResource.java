@@ -1,5 +1,7 @@
 package com.hkprogrammer.cursomc.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hkprogrammer.cursomc.domain.Categoria;
 import com.hkprogrammer.cursomc.domain.Produto;
-import com.hkprogrammer.cursomc.dto.CategoriaDTO;
 import com.hkprogrammer.cursomc.dto.ProdutoDTO;
+import com.hkprogrammer.cursomc.resources.utils.URL;
 import com.hkprogrammer.cursomc.services.ProdutoService;
 
 @RestController
@@ -29,16 +30,20 @@ public class ProdutoResource {
 		return ResponseEntity.ok(obj);
 	}
 	
-	@GetMapping("/page")
+	@GetMapping
 	public ResponseEntity<Page<ProdutoDTO>> findPage(
 			@RequestParam(defaultValue = "") String nome,
-			@RequestParam(defaultValue = "") Integer categorias,
+			@RequestParam(defaultValue = "") String categorias,
 			@RequestParam(defaultValue = "0") Integer page,
 			@RequestParam(defaultValue = "24") Integer linesPerPage,
 			@RequestParam(defaultValue = "nome") String orderBy,
 			@RequestParam(defaultValue = "ASC") String direction) {
-		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
-		Page<CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
+		
+		String nomeDecode = URL.decodeParam(nome);
+		List<Integer> ids = URL.decodeIntList(categorias);
+		
+		Page<Produto> list = service.search(nomeDecode, ids, page, linesPerPage, orderBy, direction);
+		Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
 		return ResponseEntity.ok(listDTO);
 	}
 	
