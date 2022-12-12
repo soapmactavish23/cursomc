@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.hkprogrammer.cursomc.domain.enums.Perfil;
 
 public class UserSS implements UserDetails {
-
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -19,12 +18,7 @@ public class UserSS implements UserDetails {
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public Integer getId() {
-		return id;
-	}
-
 	public UserSS() {
-
 	}
 
 	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
@@ -32,8 +26,11 @@ public class UserSS implements UserDetails {
 		this.id = id;
 		this.email = email;
 		this.senha = senha;
-		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao()))
-				.collect(Collectors.toList());
+		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 	@Override
@@ -58,7 +55,7 @@ public class UserSS implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -70,5 +67,4 @@ public class UserSS implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
 }

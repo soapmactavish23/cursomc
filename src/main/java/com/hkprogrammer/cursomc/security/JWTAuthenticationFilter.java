@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,8 +22,10 @@ import com.hkprogrammer.cursomc.dto.CredenciaisDTO;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
 	private JWTUtil jwtUtil;
 
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
@@ -37,12 +40,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		try {
 			CredenciaisDTO creds = new ObjectMapper().readValue(req.getInputStream(), CredenciaisDTO.class);
-
+			
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getEmail(),
 					creds.getSenha(), new ArrayList<>());
-
+			
 			Authentication auth = authenticationManager.authenticate(authToken);
+			
 			return auth;
+			
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -73,5 +78,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 					+ "\"message\": \"Email ou senha inválidos\", " + "\"path\": \"/login\"}";
 		}
 	}
-
 }

@@ -25,6 +25,11 @@ public class CredenciaisDTO implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+
+	@Override
+	public String toString() {
+		return "CredenciaisDTO [email=" + email + ", senha=" + senha + "]";
+	}
 	
 	
 	
